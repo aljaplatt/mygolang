@@ -1,0 +1,42 @@
+go mod, build and run are tools
+
+module name 
+- initialise module - it is dependant on what version of golang? go 1.19 etc 
+
+new - 1.0.0
+patch - 1.0.1
+minor - 1.1.0
+major - 2.0.0
+
+go toolchain - pull in dependencies
+
+cl: go get -u github.com/gorilla/mux -->
+mod file: require github.com/gorilla/mux v1.8.0 // indirect
+
+indirect means we're not currently using it. 
+
+after we start using i t- we can use go mod tidy if it shows as being indirect, this tidies libraries and unused items etc
+
+we also get the go.sum file - checks file using hash sum 
+i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI= - security, 
+
+- go mod verify - checks go.sum and checks package imports
+
+- packages are stored in /Users/alexplatt/go/pkg/mod/cache, not the working directory
+
+go build . - The dot means build here, and this gives us a new file, not sure what it is or does
+
+- go list all - expensive, lists all packages installed
+- go list -m all - better, shows dependencies like below 
+
+alexplatt@Alexs-MacBook-Pro 26modules % go list -m all
+github.com/aljaplatt/mygolang/tree/main/26modules
+github.com/gorilla/mux v1.8.0
+
+alexplatt@Alexs-MacBook-Pro 26modules % go list -m -versions github.com/gorilla/mux
+github.com/gorilla/mux v1.2.0 v1.3.0 v1.4.0 v1.5.0 v1.6.0 v1.6.1 v1.6.2 v1.7.0 v1.7.1 v1.7.2 v1.7.3 v1.7.4 v1.8.0
+
+- go mod graph shows package 1 is dependent on package 2 etc
+github.com/aljaplatt/mygolang/tree/main/26modules github.com/gorilla/mux@v1.8.0
+
+go mod vendor 
