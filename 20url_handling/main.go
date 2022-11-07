@@ -38,7 +38,7 @@ func main()  {
 	Param is: [gsdfgsdfg09f]
 	*/
 	//? Construct URL ??  
-	//! IMPORTANT - & = pass on reference, not copy !
+	//! IMPORTANT - & = you have to pass on reference, not copy !
 	partsOfUrl := &url.URL{ 
 	// partsOfUrl := url.URL{ - will work but problem ?
 		Scheme: "https",
