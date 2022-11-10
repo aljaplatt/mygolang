@@ -7,9 +7,14 @@ import (
 	// "time"
 )
 
+//mutex video 
+// mutual exclusion lock
+// lock memory until this one thing is working
+// lock unlock - can also read/write 
 var signals = []string{"test"}
 
-var wg sync.WaitGroup //pointer
+// variable for waitgroup 
+var wg sync.WaitGroup // creates a pointer
 var mut sync.Mutex    // pointer
 
 func main()  {
@@ -31,23 +36,28 @@ func main()  {
 
 	for _, web := range websitelist {
 		// loop thru and grab status code for each site
+		// need to wait in main, use sync package
 		go getStatusCode(web)
+		// when the goroutine is created, add it to the waitgroup
+		// 1 - 1 goroutine 
 		wg.Add(1)
 	}
 
+	// wait - pause main method until waigroup tasks have finished 
+	// this will know when the done signal comes from getStatusCode()
 	wg.Wait()
 	fmt.Println(signals)
 }
 
-func greeter(s string) {
-	// log.Println("sup")
-	for i := 0; i < 6; i++ {
-		// this will work but is not good practice
-		// time.Sleep(3 * time.Millisecond)
-		fmt.Printf("Str%v: %v\n", i, s)
+// func greeter(s string) {
+// 	// log.Println("sup")
+// 	for i := 0; i < 6; i++ {
+// 		// this will work but is not good practice
+// 		// time.Sleep(3 * time.Millisecond)
+// 		fmt.Printf("Str%v: %v\n", i, s)
 		
-	}
-}
+// 	}
+// }
 
 /**
 //* 1
@@ -66,16 +76,21 @@ Str5: world
 */
 
 // makes request to website, gets status code
-func getStatusCode(ep string)  {
-	// ep = endpoint 
-	res, err := http.Get(ep)
+func getStatusCode(endpoint string)  {
+	// when everything is finished pass on the signal that it is done.
+	defer wg.Done()
+	// endpoint = endpoint 
+	res, err := http.Get(endpoint)
 	if err != nil {
 		fmt.Println("Problem in endpoint")
 	} else {
+		// mutex lock 
 		mut.Lock()
-		signals = append(signals, ep)
+		// mutex - add endpoint to signals slice
+		signals = append(signals, endpoint)
+		// when done, unlock 
 		mut.Unlock()
 		
-		fmt.Printf("%d status code for %s", res.StatusCode, ep)
+		fmt.Printf("%d status code for %s\n", res.StatusCode, endpoint)
 	}
 }

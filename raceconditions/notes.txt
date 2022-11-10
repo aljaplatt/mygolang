@@ -1,0 +1,3 @@
+multiple threads
+2 or more threads try to write to the same memory space simultaneously 
+- it becomes a race - 1 will fail, then you have problems 
